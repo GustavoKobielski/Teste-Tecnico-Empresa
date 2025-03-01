@@ -1,5 +1,5 @@
 import { NavLink } from "react-router-dom";
-import { House, Users, Gear, List } from "phosphor-react";
+import { House, Users, List } from "phosphor-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useState } from "react";
@@ -37,7 +37,6 @@ function SidebarContent({ closeSidebar }: { closeSidebar?: () => void }) {
   const menuItems = [
     { title: "Home", url: "/", icon: House },
     { title: "Usuários", url: "/users", icon: Users },
-    { title: "Configurações", url: "/settings", icon: Gear },
   ];
 
   const handleLogout = () => {
@@ -55,7 +54,7 @@ function SidebarContent({ closeSidebar }: { closeSidebar?: () => void }) {
           to={item.url}
           className={({ isActive }) =>
             `flex items-center gap-2 px-4 py-2 rounded-md transition-colors ${
-              isActive ? "bg-ring text-foreground" : "text-primary hover:ring hover:text-primary"
+              isActive ? "bg-background text-foreground" : "text-primary hover:ring hover:text-primary"
             }`
           }
           onClick={closeSidebar}

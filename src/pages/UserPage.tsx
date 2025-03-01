@@ -18,6 +18,7 @@ type User = {
 
 export default function UsersPage() {
   const [users, setUsers] = useState<User[]>([]);
+  const [allUsers, setAllUsers] = useState<User[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [filter, setFilter] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -25,6 +26,7 @@ export default function UsersPage() {
   const [isExportModalOpen, setIsExportModalOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 7;
+
 
   useEffect(() => {
     setIsLoading(true);
@@ -35,6 +37,15 @@ export default function UsersPage() {
         setIsLoading(false);
       });
   }, [currentPage]);
+
+
+  useEffect(() => {
+    fetch("https://dummyjson.com/users")
+      .then((res) => res.json())
+      .then((data) => {
+        setAllUsers(data.users);
+      });
+  }, []);
 
   const handleDelete = (id: number) => {
     setUsers(users.filter((user) => user.id !== id));
@@ -57,7 +68,7 @@ export default function UsersPage() {
   };
 
   const exportToExcel = () => {
-    const worksheet = XLSX.utils.json_to_sheet(users);
+    const worksheet = XLSX.utils.json_to_sheet(allUsers); 
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, "Users");
     XLSX.writeFile(workbook, "users.xlsx");
@@ -66,7 +77,7 @@ export default function UsersPage() {
   const exportToPDF = () => {
     const doc = new jsPDF();
     doc.text("Lista de Usuários", 10, 10);
-    const tableData = users.map(user => [user.id, user.firstName, user.lastName, user.email]);
+    const tableData = allUsers.map(user => [user.id, user.firstName, user.lastName, user.email]);
     
     autoTable(doc, { head: [["ID", "Nome", "Sobrenome", "Email"]], body: tableData });
   
